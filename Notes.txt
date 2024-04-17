@@ -1,0 +1,668 @@
+//SECTION - Go Over Vite
+    -- Vite is a tool that is meant to streamline development experience AKA its a tool for us
+    -- Vite also vastly improves performance of the application as well.
+    -- it does this with,
+    -- Lazy Loading Modules, allowing you to load certain components or parts of your application only when needed.
+    -- It Excels at tree shaking, which eliminates unused code from your project during the build process
+
+//SECTION - Go Over what Electron is
+    -- Electron is an open-source framework developed by Github which allows us to build cross-platform desktop application using HTML, CSS, Javascript, electron
+    -- Go to the website and show all of the applications made with electron and what electron is able to be used with
+    -- and as with desktop application that also mean that you are able to utilize things like the desktops file system, powershell, basically anything thats on the computer
+    which allows you to not only use it for "website designs" but for scripts that would normally be on the computer itself but with the ability to make a nice UI as well.
+
+//SECTION - Go over why having css is so nice
+    -- So CSS is an extremely powerful Styling Language, Most of the time you tend to overlook css and can really hate it, but I promise you that not having CSS is really annoying
+    -- With CSS you have tools like Bootstrap / Tailwind that make Reactive UI extremely useful now with tools like XAML you can make it reactive but its extremely tedious.
+
+// SECTION - Start Making the Application, HAVE FUN! :D 
+
+//SECTION - Create initial application
+    //NOTE - npm create @quick-start/electron .
+    -- mirror proxy allows you to use a custom URL for downloading Electron binaries instead of the default GitHub releases page. This can be useful 
+    ---If you are unable to access GitHub directly due to network restrictions or firewalls 2.
+    ---If you need to provide a custom build of Electron 2.
+
+
+//SECTION - Incorperate wanted packages / fix dependencies / devDependencies
+    //NOTE -  Replace Dev / Dependencies  Adds ( Axios / vue-router / sass / bootstrap / MDI) Removes ( prettierrc )
+    //NOTE - change start - test && dev to start
+    //NOTE - Preview is so that you are able to test you application as it would behave when in actual production.
+
+  "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "axios": "^1.6.8",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0",
+    "vue": "^3.4.15",
+    "vue-router": "^4.0.3"
+  },
+  "devDependencies": {
+    "@electron-toolkit/eslint-config": "^1.0.1",
+    "@electron-toolkit/preload": "^3.0.0",
+    "@electron-toolkit/utils": "^3.0.0",
+    "@popperjs/core": "^2.11.8",
+    "@rushstack/eslint-patch": "^1.6.1",
+    "@vitejs/plugin-vue": "^5.0.3",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "bootstrap": "^5.3.3",
+    "electron": "^28.2.0",
+    "electron-builder": "^24.9.1",
+    "electron-updater": "^6.1.7",
+    "electron-vite": "^2.0.0",
+    "eslint": "^8.56.0",
+    "eslint-plugin-vue": "^9.20.1",
+    "vite": "^5.0.12"
+  }
+
+
+//SECTION - Installing Packages
+    //NOTE - run $npm i
+
+//SECTION - Show off the template
+    //NOTE - show off how you are able to check whether the user is desktop / website within App.vue
+    const check = window.electron ? true : false
+
+
+//SECTION - Adding vue-router into the project
+    //NOTE - create router (src/renderer/src/router/router.js)
+
+    import { createRouter, createWebHashHistory } from 'vue-router'
+
+    import Home from '../pages/Home.vue';
+    import About from '../pages/Pokemon.vue';
+    const routes = [
+    {
+        path: '/',
+        name: 'HomePage',
+        component: Home
+    },
+    {
+        path: '/pokemon/:pokemonId',
+        name: 'PokePage',
+        component: About
+    }
+    ]
+
+    export default createRouter({
+        history: createWebHashHistory(),
+        routes
+    })
+
+    //NOTE - Add imports into (src/renderer/src/main.js) and fix createApp
+    
+    import router from './router/router'
+
+    createApp(App).use(router).mount('#app')
+
+    //SECTION - Contiue to add Router Stuff
+
+        //NOTE - Remove components
+
+        //NOTE - create pages directory (src/renderer/src/pages)
+        //NOTE - create Home.vue && Pokemon.vue
+
+        //NOTE - Swap out the App.vue
+
+        <template>
+
+        <body>
+            
+            <header></header>
+
+            <main>
+            <router-view></router-view>
+            </main>
+
+            <footer></footer>
+            
+        </body>
+        </template>
+
+        <script setup>
+
+        </script>
+
+        <style lang="scss">
+        body {
+        min-height: 100vh;
+        }
+
+        main{
+        min-height: 100vh;
+        }
+
+        #app {
+        min-height: 100vh;
+        }
+
+
+        </style>
+
+
+
+
+//SECTION Adding SASS, bootstrap & MDI into the project
+    //NOTE - Create main.scss into (src/renderer/src/assets/main.scss)
+    //NOTE - Remove the .css files from the assets folder
+    //NOTE - Add import into the main.scss
+
+    @import 'bootstrap';
+
+    @font-face {
+        font-family: 'Pokemon';
+        src: url('./fonts/Pokemon.ttf') format('truetype');
+    }
+
+
+    :root {
+        --bg-color: rgb(41, 41, 41);
+        --primary-color: #5b5e63;
+    }
+
+    :root {
+        --color-background: var(--bg-color);
+    }
+
+    .btn:hover {
+        opacity: .76;
+        color: rgba(255, 255, 245, 0.86);
+    }
+
+    .bg-primary {
+        background-color: var(--primary-color) !important;
+        color: rgba(255, 255, 245, 0.86);
+    }
+
+    .font-pokemon {
+        font-family: 'Pokemon';
+        filter: drop-shadow(2px 2px 1px black);
+        letter-spacing: 1px;
+    }
+
+
+    body {
+        color: var(--color-text);
+        background: var(--color-background);
+        font-family:
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            'Segoe UI',
+            Roboto,
+            Oxygen,
+            Ubuntu,
+            Cantarell,
+            'Fira Sans',
+            'Droid Sans',
+            'Helvetica Neue',
+            sans-serif;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    p {
+        margin: 0;
+        padding: 0;
+        color: #f7f7f7;
+    }
+
+    .icon {
+        height: 120px;
+        width: 120px;
+        filter: drop-shadow(0 0 15px rgba(250, 88, 88, 0.65))
+    }
+
+    .icon {
+        animation: pulse 4s infinite;
+    }
+
+    @keyframes pulse {
+
+        0%,
+        100% {
+            filter: drop-shadow(0 0 17px rgba(250, 88, 88, 0.75));
+        }
+
+        50% {
+            filter: drop-shadow(0 0 12px rgba(250, 88, 88, 0.47));
+        }
+    }
+
+    #pokeSearchBtn {
+        min-width: 180px;
+    }
+
+    //NOTE - Change the .css import within (renderer/src/main) to. scss
+    //NOTE - Then add the import for MDI Icons
+        import '@mdi/font/css/materialdesignicons.css'
+
+        //STUB - <span class="mdi mdi-account"></span>
+    
+    //STUB - already added css from default at bottom of notes
+
+
+//SECTION - Adding AppState to Application
+    //NOTE - Create AppState into (src/renderer/src/AppState.js)
+    //ANCHOR - Comment out the Watch / watchEffect for the future
+
+    import { reactive, watch, watchEffect } from 'vue'
+
+    export const AppState = reactive({
+        /** @type {import('./models/Poke').Poke[]} */
+        pokes: [],
+        poke: null,
+    })
+
+    watchEffect(() => {
+        if (window.electron) {
+            window.electron.loadAppState()
+            window.electron.onAppStateLoaded((loadedAppState) => {
+                Object.assign(AppState, loadedAppState)
+            })
+        }
+    })
+
+    watch(
+        () => AppState,
+        () => {
+            if (window.electron) {
+                const plainAppState = JSON.parse(JSON.stringify(AppState));
+                window.electron.saveAppState(plainAppState)
+            }
+        },
+        { deep: true }
+    )
+
+    //NOTE - Add this to preload.index.js For later
+    // Import the 'contextBridge' module from 'electron' and the 'electronAPI' from '@electron-toolkit/preload'
+    import { contextBridge } from 'electron'
+    import { electronAPI } from '@electron-toolkit/preload'
+
+
+    // Check if the current process has context isolation enabled
+    if (process.contextIsolated) {
+    try {
+        https://www.electronjs.org/docs/latest/api/context-bridge
+        // If context isolation is enabled, use 'contextBridge' to expose the 'electronAPI' and custom 'api' to the renderer process
+        // The 'electronAPI' and 'api' will be accessible in the renderer process through the 'window.electron' and 'window.api' objects, respectively [0]
+        contextBridge.exposeInMainWorld('electron', electronAPI)
+    } catch (error) {
+        // If there's an error while exposing the APIs, log the error to the console
+        console.error(error)
+    }
+    } else {
+    // If context isolation is disabled, directly attach the 'electronAPI' and custom 'api' to the global 'window' object in the renderer process
+    // This is not recommended as it bypasses the security benefits of context isolation [0]
+    // window.electron = electronAPI
+    // window.api = api
+    }
+
+
+//SECTION - Adding Services / Axios
+    //NOTE create Services into (src/renderer/src)
+    //NOTE create AxiosService.js into (src/renderer/src/Services)
+
+    import Axios from 'axios'
+
+    export const PokeAPI = Axios.create({
+        baseURL: "https://pokeapi.co/api/v2/",
+        timeout: 8000,
+    })
+
+
+//SECTION - Updating the index.html
+    connect-src 'self' https://pokeapi.co;  ==> So we are able to get access.
+    img-src 'self' data: https://raw.githubusercontent.com; ==> Able to get access to their images
+
+    //NOTE - Remove the Title from index.html
+
+//SECTION - Adding Icons / Title
+    //NOTE - Copy the icons and fonts
+    //NOTE - within the main/index.js 
+        -- (process.platform === 'linux' || 'windows' ? { icon } : {}),
+        -- title: 'Pokedex',
+        -- minWidth: 500,
+        -- minHeight: 500,
+        -- ?asset - telling the application to handle this as an asset rather than a Javascript Module
+
+//SECTION - Adding the Poke Model
+    //NOTE - Add the folder and Poke.js
+    //NOTE - Make sure to explain how the model works probably pull up pokeapi and show the data as well.
+    
+    export class Poke {
+        constructor(pokeData) {
+            this.id = pokeData.id;
+            this.name = pokeData.name;
+            this.stats = pokeData.stats.map(stat => ({
+                name: stat.stat.name,
+                total: stat.base_stat
+            }));
+            this.types = pokeData.types.map(type => type.type.name);
+            this.weaknesses = pokeData.weaknesses;
+            this.strengths = pokeData.strengths;
+            this.images = {
+                default: pokeData.sprites.front_default,
+                shiny: pokeData.sprites.front_shiny
+            };
+        }
+    }
+
+
+//SECTION - Adding the pokeServices
+    //NOTE -  Make sure to explain what is going on.
+    
+    
+    import { AppState } from '../AppState'
+    import { PokeAPI } from './AxiosService';
+    import {Poke} from '../models/Poke'
+
+
+    function getRandomPokeId() {
+        const min = Math.ceil(1); // minimum poke id
+        const max = Math.floor(1025); // maximum poke id
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    async function getPokemonDamageDetails(pokeData){
+        const detailPromises = pokeData.types.map(async (typeEntry) => {
+            const typeData = (await PokeAPI.get(`type/${typeEntry.type.name}`)).data
+            return {
+                weaknesses: typeData.damage_relations.double_damage_from.map(weakness => weakness.name),
+                strengths: typeData.damage_relations.double_damage_to.map(strength => strength.name)
+            }
+        })
+
+        const detailData = await Promise.all(detailPromises)
+
+        const allWeaknesses = detailData.flatMap(detail => detail.weaknesses)
+        const allStengths = detailData.flatMap(detail => detail.strengths)
+
+        const uniqueWeaknesses = [...new Set(allWeaknesses)];
+        const uniqueStrengths = [...new Set(allStengths)]
+
+        return { weaknesses: uniqueWeaknesses, strengths: uniqueStrengths };
+    }
+
+
+    class PokeServices {
+
+        async getPokemon(id) {
+            const pokeData = (await PokeAPI.get(`pokemon/${id}`)).data
+            const pokeDetails = await getPokemonDamageDetails(pokeData)
+            pokeData.weaknesses = pokeDetails.weaknesses
+            pokeData.strengths = pokeDetails.strengths
+            return new Poke(pokeData)
+        }
+
+        async getRandomPoke(){
+            const randomPokeId = getRandomPokeId()
+            const Pokemon = await this.getPokemon(randomPokeId)
+
+            AppState.pokes.push(Pokemon)
+        }
+        
+        selectPokemon(pokemonId){
+            AppState.poke = AppState.pokes.find(p => p.id == pokemonId)
+        }
+
+    }
+
+    export const pokeServices = new PokeServices();
+
+    //STUB - Difference between flatMap and map
+    --MAP => The map() method creates a new array by calling a provided function on every element in the original array. 
+             It returns a new array with each element being the result of the callback function.
+
+
+    const arr1 = [1, 2, 3, 4];
+    arr1.map((x) => [x * 2]); // [[2], [4], [6], [8]]
+
+    --FLATMAP ==> The flatMap() method first maps each element of the array using a mapping function, then flattens the result into a new array.
+                  It combines map() and flat() in one method. It's identical to map() followed by flat() with depth 1.
+
+    const arr1 = [1, 2, 3, 4];
+    arr1.flatMap((x) => [x * 2]); // [2, 4, 6, 8]
+
+    //
+
+//SECTION - Adding HomePage && Pokemon page
+    
+    //NOTE - HomePage
+
+    <template>
+        <div class="container">
+            <div class="row">
+                <div class="col-12 text-center mt-2 fs-3 fw-semibold">
+                    <p class="font-pokemon fs-5">Electron's</p>
+                    <p class="font-pokemon fs-1">Pokédex</p>
+                </div>
+                <div class="col-12 text-center my-3">
+                    <img :src="icon" class="icon" alt="">
+                </div>
+                <div class="col-12 mt-5 text-center">
+                    <button class="btn bg-primary" @click="getRandomPoke">Get Random Pokemon</button>
+                </div>
+                <div class="col-12">
+                    <form class="my-3 text-center">
+                        <p class="font-pokemon m-2">Find Pokemon:</p>
+                        <input type="search" name="pokeSearch" id="pokeSearch" class="bg-primary">
+                        <div class="my-2">
+                            <button class="btn btn-sm btn-danger" id="pokeSearchBtn">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div
+                    class="col-12 d-flex justify-content-center align-items-center border-top border-bottom pt-1 pb-3 mb-3">
+                    <p class="font-pokemon fs-3">Your Pokemon</p>
+                </div>
+
+                <div class="col-2 pokeCard d-flex justify-content-center" v-for="p in pokes">
+                    <router-link :to="{ name: 'PokePage', params: { pokemonId: p.id } }" @click="selectPokemon(p.id)">
+                        <img :src="p.images.default" class="pokeImg" alt="as">
+                    </router-link>
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <script setup>
+    import { computed } from 'vue';
+    import icon from '../assets/imgs/icon.png'
+    import { pokeServices } from '../services/PokeServices'
+    import { AppState } from '../AppState';
+
+    const pokes = computed(() => AppState.pokes)
+
+    async function getRandomPoke(){
+        try {
+            await pokeServices.getRandomPoke()
+        }
+        catch(error) {
+            console.error(error)
+        }
+    }
+
+    function selectPokemon(pokemonId){
+        pokeServices.selectPokemon(pokemonId)
+    }
+
+    </script>
+
+
+    <style lang="scss" scoped>
+
+    .pokeCard{
+        filter: drop-shadow(0 0 13px white) brightness(95%);
+    }
+    .pokeCard:hover{
+        filter: drop-shadow(0 0 18px white) brightness(105%);
+        cursor: pointer;
+    }
+
+    .pokeImg{
+        height: 100%;
+    }
+
+    </style>
+
+    //NOTE - Pokemon Page
+
+    <template>
+        <div class="container" v-if="pokemon">
+            <div class="row">
+                <div class="col-12 text-end my-3">
+                    <router-link :to="{ name: 'HomePage' }">
+                        <span class="mdi mdi-chevron-left text-light fs-1 border rounded"></span>
+                    </router-link>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5 d-flex justify-content-center text-center mt-3">
+                    <img :src="pokemon.images?.default" alt="" class="pokeImg">
+                </div>
+                <div class="col-7 flex-grow-1">
+                    <div class="row statsContainer p-3">
+                        <div class="col-6 text-center" v-for="stat in pokemon.stats">
+                            <p class="fs-5 fw-bold">{{ stat.name }}</p>
+                            <p class="fw-semibold">{{ stat.total }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-5 d-flex justify-content-center text-center mt-3">
+                    <img :src="pokemon.images?.shiny" alt="" class="pokeImg">
+                </div>
+            </div>
+        </div>
+    </template>
+
+
+    <script setup>
+    import { computed, watchEffect } from 'vue';
+    import { AppState } from '../AppState';
+
+    let pokemon = computed(() => AppState.poke)
+    watchEffect(() => {
+        if (pokemon.value) {
+            console.log(pokemon.value)
+        }
+    })
+
+
+
+    </script>
+
+
+    <style lang="scss" scoped>
+    .pokeImg {
+        height: 250px;
+    }
+
+    .statsContainer {
+        height: 350px;
+        background-color: rgb(77, 88, 94);
+    }
+    </style>
+
+// SECTION Adding the saving Functionality
+
+    //NOTE - Go and uncomment the AppStates Save function
+
+    //NOTE - Add the preload/index.js functions
+    
+    import { contextBridge, ipcRenderer } from 'electron'
+    import { electronAPI } from '@electron-toolkit/preload'
+
+    const combinedAPI = {
+    ...electronAPI,
+    saveAppState: (appState) => ipcRenderer.send('saveAppState', appState),
+    // loadAppState: () => ipcRenderer.send('loadAppState'),
+    // onAppStateLoaded: (callback) => ipcRenderer.on('app-state-loaded', (event, appState) => callback(appState))
+    }
+
+    if (process.contextIsolated) {
+    try {
+        contextBridge.exposeInMainWorld('electron', combinedAPI)
+    } catch (error) {
+        console.error(error)
+    }
+    }
+
+
+    //NOTE - update the main/index.js
+
+    import path, { join } from 'path'
+    import { existsSync, readFileSync, writeFileSync } from 'fs'
+
+    const userDataPath = app.getPath('userData')
+
+    ipcMain.on('saveAppState', (event, AppState) => {
+    const filePath = path.join(userDataPath, 'AppState.json')
+    writeFileSync(filePath, JSON.stringify(AppState, null, 4))
+    console.log("Saved the AppState", filePath)
+    })
+
+    ipcMain.on('loadAppState', (event) => {
+    const filePath = path.join(userDataPath, 'AppState.json');
+    if (existsSync(filePath)) {
+        const appState = readFileSync(filePath, 'utf-8');
+        event.reply('app-state-loaded', JSON.parse(appState));
+    }
+    });
+
+
+
+//SECTION - incase of extra time
+    //NOTE - add to main/index.js
+
+    import os from 'os'
+
+    ipcMain.on('get-system-info', async () => {
+    const memoryUsage = getMemoryUsage();
+
+    console.log ({memoryUsage})
+    });
+
+    function getMemoryUsage() {
+    const totalMemory = os.totalmem();
+    const freeMemory = os.freemem();
+    const usedMemory = totalMemory - freeMemory;
+
+    return {
+        total: formatBytes(totalMemory),
+        used: formatBytes(usedMemory),
+        free: formatBytes(freeMemory),
+    };
+    }
+
+    function formatBytes(bytes) {
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    let i = 0;
+
+    while (bytes >= 1024 && i < units.length - 1) {
+        bytes /= 1024;
+        i++;
+    }
+
+    return `${bytes.toFixed(2)} ${units[i]}`;
+    }
+
+
+    //NOTE - add to preload/index.js
+    getSystemInfo: () => ipcRenderer.send('get-system-info')
+
+    //NOTE - replace Home.vue
+    
+    async function getRandomPoke() {
+    try {
+        window.electron.getSystemInfo()
+        // await pokeServices.getRandomPoke()
+    }
+    catch (error) {
+        console.error(error)
+    }
+}
